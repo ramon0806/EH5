@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="eh5.js"></script>
+</head>
+<body>
+<script>
+
+    let titleLayout = createHLayout()
+    titleLayout.setStyle('width: 100%; height: 48px; border-bottom: 1px solid #00000033')
+    rootLayout.appendChild(titleLayout)
+
+    createImage().src('http://image.allstellar.cn/1754793643897_1754793652323.png?imageView2/2/w/64/format/png/q/75|imageslim').setStyle('width: 24px; height: 24px; align-self: center; margin: 0 0 0 16px').to(titleLayout)
+
+    createText().text('EH5 Demo').setStyle('font-size: 16px; font-weight: 900; align-self: center; margin: 0 0 0 16px').to(titleLayout)
+
+
+    let elementBtn = createEntry('Elements').click(function(e) {
+        showElementPage()
+        e.stopPropagation()
+    }).to(rootLayout)
+
+
+    let widgetBtn = createEntry('Widgets').click(function(e) {
+        showWidgetPage()
+        e.stopPropagation()
+    }).to(rootLayout)
+
+
+    let toastBtn = createEntry('Toasts').click(function(e) {
+        showToastPage()
+        e.stopPropagation()
+    }).to(rootLayout)
+
+    let dialogBtn = createEntry('Dialogs').click(function(e) {
+        createDialog().setModel({
+            title: 'title',
+            message: 'The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky above them.'
+        }).show()
+
+        e.stopPropagation()
+    }).to(rootLayout)
+
+    let layoutBtn = createEntry('Layouts').click(function(e) {
+        showLayoutPage()
+        e.stopPropagation()
+    }).to(rootLayout)
+
+    let listBtn = createEntry('Scroll & List').click(function(e) {
+        showScrollPage()
+        e.stopPropagation()
+    }).to(rootLayout)
+
+    function createEntry(t) {
+        let v = createHLayout().setStyle('width: 100%; height: 48px; border-bottom: 1px solid #0000001a')
+        let text = createText().text(t).centerLeft().setStyle('margin: 0 0 0 16px; flex: 1').to(v)
+
+        let arrow = createImage()
+        arrow.svg('<svg viewBox="0 0 32 32" width="32" height="32"><path d="M12 10l6 6-6 6" stroke="currentColor" stroke-width="1" fill="none"/></svg>')
+        arrow.setStyle('width: 48px; height: 48px')
+        arrow.color('#999')
+        arrow.$svg.setStyle('width: 32px')
+        v.appendChild(arrow)
+
+        addHoverEffect(v)
+
+        return v
+    }
+
+    function showElementPage() {
+        let v = createPage()
+        v.titleBar.setModel({
+            text: 'Elements'
+        })
+
+        let layout = v.layout
+        layout.setStyle('padding: 0 12px 24px 12px')
+
+        createTitle().text('Image').to(layout)
+        createImage().setStyle('width: 160px; height: 160px').src('http://image.allstellar.cn/explorer_1723704059335.png').to(layout)
+
+        createTitle().text('svg').to(layout)
+        createImage().svg('<svg viewBox="0 0 32 32" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1"><path d="M16 8v16M8 16h16"/></svg>').setStyle('width: 48px; height: 48px; background: #00000010').to(layout)
+
+        createTitle().text('Button').to(layout)
+        createButton().text('This is a button').click(function(e) {
+            console.log("this is button")
+        }).to(layout)
+
+        createTitle().text('LineButton').to(layout)
+        createLineButton().text('This is a LineButton').click(function(e) {
+            console.log('this is a line button')
+        }).to(layout)
+
+        createTitle().text('InputText').to(layout)
+        let input = createInputText().setStyle('width: 100%;').to(layout)
+        input.placeholder = 'this is a hint'
+        input.onTextChanged = function(t) {
+            console.log("onTextChanged", t)
+        }
+
+        createTitle().text('TextArea').to(layout)
+        let textArea = createTextArea().setStyle('width: 100%; height: 80px').to(layout)
+        textArea.placeholder = 'this is a hint'
+
+        createTitle().text('CheckBox').to(layout)
+        createCheckbox().to(layout)
+
+        createTitle().text('CheckBox with label').to(layout)
+        let check = createCheckboxLabel().to(layout)
+        check.label.text("checkbox label")
+
+        createTitle().text('Switcher').to(layout)
+        createSwitcher().to(layout)
+
+        createTitle().text('LoadingView').to(layout)
+        let loadingLayout = createHLayout().setStyle("height: 32px").to(layout)
+        createLineButton().text("start").setStyle("width: 80px").click(function() {
+            loadingView.start()
+        }).to(loadingLayout)
+
+        createLineButton().text("stop").setStyle("width: 80px; margin: 0 0 0 8px").click(function() {
+            loadingView.stop()
+        }).to(loadingLayout)
+
+        createDiv().setStyle('flex: 1').to(loadingLayout)
+
+        let loadingView = createLoadingView().setStyle('align-self: center').size(20).color('#333').to(loadingLayout)
+
+        showSlideView(v)
+
+
+        createTitle().text('DatePicker').to(layout)
+        let dateView = createInputDate().to(layout)
+
+        createTitle().text('TimePicker').to(layout)
+        let timeView = createInputTime().to(layout)
+
+        createTitle().text('DatetimePicker').to(layout)
+        let datetimeView = createInputDateTime().to(layout)
+
+
+        function createTitle() {
+            return createText().setStyle('padding: 24px 0 4px 0')
+        }
+    }
+
+
+    function showWidgetPage() {
+        let v = createPage()
+        v.titleBar.setModel({
+            text: 'Widgets'
+        })
+
+        let layout = v.layout
+        layout.setStyle('padding: 0 12px 24px 12px')
+
+        createTitle().text('Tab').to(layout)
+        let tab = createTab().to(layout)
+        tab.accentColor('#333')
+        tab.setModel({
+            datas: [{
+                text: 'Choice 1',
+                select: true
+            }, {
+                text: 'Choice 2'
+            }]
+        })
+
+        createTitle().text('AppTab').to(layout)
+        let appTab = createAppTab().to(layout)
+        appTab.accentColor('#333')
+        appTab.setModel({
+            datas: [{
+                text: 'Choice 1',
+                select: true
+            }, {
+                text: 'Choice 2'
+            }]
+        })
+
+        createTitle().text('Stepper').to(layout)
+        let stepper = createStepper().to(layout)
+        stepper.minNumber = 0
+        stepper.maxNumber = 100
+        stepper.step = 4
+        stepper.setNumberSilent(64)
+        stepper.onChange = function(n) {
+            console.log('Stepper', n)
+        }
+
+
+        createTitle().text('Dropdown').to(layout)
+        let dropdown = createDropdown().to(layout)
+        dropdown.setModel({
+            datas: [{
+                text: 'Choice 1'
+            }, {
+                text: 'Choice 2',
+                select: true
+            }, {
+                text: 'Choice 3 Choice 3 Choice 3'
+            }],
+            hint: "choose..."
+        })
+
+        showSlideView(v)
+
+        function createTitle() {
+            return createText().setStyle('padding: 24px 0 4px 0')
+        }
+    }
+
+    function showToastPage() {
+        let v = createPage()
+        v.titleBar.setModel({
+            text: 'Toasts'
+        })
+
+        let layout = v.layout
+        layout.setStyle('padding: 0 12px 24px 12px')
+
+        createBtn().text('success toast').click(function() {
+            showSuccessToast('success toast')
+        }).to(layout)
+
+        createBtn().text('info toast').click(function() {
+            showToast('info toast')
+        }).to(layout)
+
+        createBtn().text('warn toast').click(function() {
+            showWarnToast('warn toast')
+        }).to(layout)
+
+        createBtn().text('error toast').click(function() {
+            showErrorToast('error toast')
+        }).to(layout)
+
+        let longText = 'The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky above them.'
+
+        createBtn().text('long success toast').click(function() {
+            showSuccessToast(longText)
+        }).to(layout)
+
+        createBtn().text('long info toast').click(function() {
+            showToast(longText)
+        }).to(layout)
+
+        createBtn().text('long warn toast').click(function() {
+            showWarnToast(longText)
+        }).to(layout)
+
+        createBtn().text('long error toast').click(function() {
+            showErrorToast(longText)
+        }).to(layout)
+
+
+        showSlideView(v)
+
+        function createBtn() {
+            return createLineButton().setStyle('width: 100%; height: 36px; margin: 16px 0 0 0')
+        }
+    }
+
+    function showLayoutPage() {
+        let v = createPage()
+        v.titleBar.setModel({
+            text: 'Layouts'
+        })
+
+        let layout = v.layout
+        layout.setStyle('padding: 0 12px 24px 12px')
+
+        createTitle().text('Vertical Layout').to(layout)
+        let vLayout = createVLayout().setStyle('width: 100%; height: 320px; border: 1px solid #00000033').to(layout)
+        let v1 = createTextBlock().text('h 64px').center().setStyle('height: 64px; background: #ff000033').to(vLayout)
+        let v2 = createTextBlock().text('h 64px').center().setStyle('width: 100%; height: 64px; background: #00ff0033').to(vLayout)
+        let v3 = createTextBlock().text('h 64px | flex 1').center().setStyle('width: 100%; height: 64px; flex: 1; background: #0000ff33').to(vLayout)
+
+        createTitle().text('Horizontal Layout').to(layout)
+        let hLayout = createHLayout().setStyle('width: 100%; height: 64px; border: 1px solid #00000033').to(layout)
+        let h1 = createTextBlock().text('w 64px').center().setStyle('width: 64px; background: #ff000033').to(hLayout)
+        let h2 = createTextBlock().text('w 64px').center().setStyle('width: 64px; background: #00ff0033').to(hLayout)
+        let h3 = createTextBlock().text('w 64px | flex 1').center().setStyle('width: 64px; flex: 1; background: #0000ff33').to(hLayout)
+
+        createTitle().text('Frame Layout').to(layout)
+        let fLayout = createDiv().setStyle('width: 100%; height: 160px; border: 1px solid #00000033; position: relative').to(layout)
+        let f1 = createTextBlock().text('f1').center().setStyle('width: 96px; height: 96px; background: #ff000033; position: absolute; left: 0; top: 0').to(fLayout)
+        let f2 = createTextBlock().text('f2').center().setStyle('width: 96px; height: 96px; background: #00ff0033; position: absolute; right: 0; top: 0').to(fLayout)
+        let f3 = createTextBlock().text('f3').center().setStyle('width: 96px; height: 96px; background: #0000ff33; position: absolute; right: 0; bottom: 0').to(fLayout)
+        let f4 = createTextBlock().text('f4').center().setStyle('width: 96px; height: 96px; background: #ffff0033; position: absolute; left: 0; bottom: 0').to(fLayout)
+
+        showSlideView(v)
+
+        function createTitle() {
+            return createText().setStyle('padding: 24px 0 4px 0')
+        }
+    }
+
+
+    function showScrollPage() {
+        let v = createVLayout()
+        v.setStyle('width: 100%; height: 100%; background: #fff; pointer-events: all')
+        v.onclick = function(e) {
+            e.stopPropagation()
+        }
+
+        v.titleBar = createTitleBar().to(v)
+        v.titleBar.children[1].text('Scroll & List')
+
+        let text = createTextBlock().text('0').center().setStyle('width: 100%; height: 80px; border-bottom: 1px solid #00000033').to(v)
+
+        let sv = createVScrollView().setStyle('width: 100%; flex: 1;').to(v)
+        sv.hideScrollbar()
+        sv.addEventListener('scroll', function(e) {
+            let t = sv.scrollTop
+            text.text(t)
+        })
+
+        v.layout = createVLayout().to(sv)
+
+        let layout = v.layout
+
+        let items = []
+        for (let i = 0; i < 20; i++) {
+            let item = createHLayout()
+            addHoverEffect(item)
+
+            item.onclick = function() {
+                console.log('item click', item)
+                showLayoutPage()
+            }
+
+            item.setStyle("height: 64px; border-bottom: 1px solid #00000033; flex-shrink: 0")
+
+            let img = createImage().setStyle("width: 48px; height: 48px; align-self: center; margin: 0 0 0 8px").to(item)
+            img.src('http://image.allstellar.cn/explorer_1723704059335.png')
+
+            let p = createText().to(item)
+            p.centerLeft().text("text" + i).setStyle("margin: 0 0 0 8px; flex: 1")
+
+            let btn = createLineButton().to(item)
+            btn.text('Confirm')
+            btn.onclick = function(e) {
+                showToast(p.innerText)
+                e.stopPropagation()
+            }
+            btn.setStyle('width: 80px; height: 32px; align-self: center; border-radius: 3px; margin: 0 8px 0 0')
+
+            items.push(item)
+        }
+
+        layout.batchAppend(items)
+
+        v.requestWidth = 640
+        showSlideView(v)
+    }
+
+    function createTitleBar() {
+        let v = createHLayout()
+
+        v.setModel = function(m) {
+            v.model = m
+            text.text(m.text)
+        }
+
+        v.setStyle('width: 100%; height: 48px; border-bottom: 1px solid #00000033')
+
+        let back = createImage()
+        back.svg('<svg t="1754828312007" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2435" width="16" height="16"><path d="M736.256 1024 224.256 512 736.256 0 799.744 63.744 351.488 512 799.744 960.512Z" fill="#666666" p-id="2436"></path></svg>')
+        back.setStyle('width: 48px; height: 48px; margin: 0 0 0 0; align-self: center; cursor: pointer')
+        back.$svg.setStyle('width: 18px; heigth: 18px')
+        back.color('#999')
+        addColorHoverEffect(back)
+        back.onclick = function(e) {
+            hideSlideView()
+            e.stopPropagation()
+        }
+        v.appendChild(back)
+
+        let text = createText()
+        text.text("标题")
+        text.setStyle('font-weight: 900; font-size: 15px; align-self: center')
+        v.appendChild(text)
+
+        return v
+    }
+
+    function createPage() {
+        let v = createVLayout()
+        v.setStyle('width: 100%; height: 100%; background: #fff; pointer-events: all')
+        v.onclick = function(e) {
+            e.stopPropagation()
+        }
+
+        v.titleBar = createTitleBar().to(v)
+        let sv = createVScrollView().setStyle('width: 100%; flex: 1;').to(v)
+        v.layout = createVLayout().to(sv)
+        return v
+    }
+
+</script>
+
+</body>
+</html>
